@@ -1,0 +1,140 @@
+doctype html
+html(lang="en")
+    head
+        title Ticket Management System
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
+        style.
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f9;
+            }
+            header {
+                background-color: #2c3e50;
+                padding: 20px;
+                color: #ecf0f1;
+                text-align: center;
+            }
+            header h1 {
+                margin: 0;
+                font-size: 36px;
+            }
+            .content {
+                width: 80%;
+                margin: 40px auto;
+                background-color: white;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .tabs {
+                display: flex;
+                margin-bottom: 20px;
+            }
+            .tab {
+                padding: 14px 20px;
+                margin-right: 10px;
+                cursor: pointer;
+                background-color: #ecf0f1;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-weight: bold;
+            }
+            .tab.active {
+                background-color: #3498db;
+                color: white;
+                border-color: #3498db;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            label {
+                font-size: 14px;
+                font-weight: bold;
+                margin-bottom: 5px;
+                color: #34495e;
+            }
+            input, select, button {
+                padding: 12px;
+                font-size: 16px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                outline: none;
+                box-sizing: border-box;
+            }
+            input[type="number"], select {
+                width: 100%;
+            }
+            button {
+                background-color: #3498db;
+                color: white;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            button:hover {
+                background-color: #2980b9;
+            }
+            .error-message {
+                color: red;
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+            .ticket-list {
+                margin-top: 30px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+            th {
+                background-color: #ecf0f1;
+            }
+            tbody tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+    body
+        header
+            h1 Admin Management System
+        .content
+            if errorMessage
+                p.error-message= errorMessage
+
+            .tabs
+                div.tab#ticketTab.active 车票管理
+                div.tab#userTab 用户管理
+
+            if user && users.length > 0
+                h2 User Manager
+                table
+                    thead
+                        tr
+                            th User ID
+                            th User Type
+                            th User Role
+                            th User Email
+                            th User Password
+                    tbody
+                        each ticket in tickets
+                            tr
+                                td= ticket.id
+                                td= ticket.type
+                                td= ticket.issue_date
+                                td= ticket.status
+            else
+                p No tickets found for this month.

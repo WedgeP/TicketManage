@@ -97,3 +97,65 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     });
 });
+//显示用户车票
+// ticket.js
+
+document.addEventListener('DOMContentLoaded', function() {
+    const ticketForm = document.querySelector('form.ticket-form');
+
+    if (ticketForm) {
+        ticketForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止表单的默认提交行为
+
+            const ticketCount = document.getElementById('ticketCount').value;
+            const month = document.getElementById('month').value;
+
+            // 简单的表单验证
+            if (!ticketCount || !month) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            // 创建一个包含表单数据的对象
+            const formData = {
+                ticketCount: ticketCount,
+                month: month
+            };
+
+            // 发送 AJAX 请求到后端
+            fetch('/tickets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json()) // 解析返回的 JSON
+                .then(data => {
+                    if (data.errorMessage) {
+                        alert(data.errorMessage); // 显示错误消息
+                    } else {
+                        // 清空现有的票务列表
+                        const ticketsTable = document.querySelector('table tbody');
+                        ticketsTable.innerHTML = '';
+
+                        // 渲染新的票务数据
+                        data.tickets.forEach(ticket => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                            <td>${ticket.id}</td>
+                            <td>${ticket.type}</td>
+                            <td>${ticket.created_at}</td>
+                            <td>${ticket.status}</td>
+                        `;
+                            ticketsTable.appendChild(row);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching tickets:', error);
+                    alert('There was an error fetching your tickets');
+                });
+        });
+    }
+});

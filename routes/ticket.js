@@ -27,6 +27,7 @@ router.post('/', (req, res) => {
                 .select('*')
                 .where('user_id', username)
                 .andWhereRaw('strftime("%m", created_at) = ?', [month])
+                .orderBy('created_at', 'desc')
                 .limit(ticketCount);
 
             // 如果查询结果为空
