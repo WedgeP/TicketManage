@@ -1,0 +1,114 @@
+doctype html
+html(lang="en")
+    head
+        title User Registration
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
+        style
+            | body {
+            |   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            |   background-color: #f4f4f7;
+            |   display: flex;
+            |   justify-content: center;
+            |   align-items: center;
+            |   height: 100vh;
+            |   margin: 0;
+            | }
+            | .container {
+            |   background: #ffffff;
+            |   padding: 40px;
+            |   border-radius: 15px;
+            |   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            |   width: 100%;
+            |   max-width: 400px;
+            |   text-align: center;
+            | }
+            | h1 {
+            |   font-size: 28px;
+            |   font-weight: bold;
+            |   margin-bottom: 20px;
+            |   color: #333;
+            | }
+            | p.error-message {
+            |   color: #f44336;
+            |   font-size: 14px;
+            |   margin-top: 10px;
+            | }
+            | form div {
+            |   margin-bottom: 20px;
+            | }
+            | label {
+            |   display: block;
+            |   margin-bottom: 5px;
+            |   text-align: left;
+            |   font-weight: bold;
+            |   font-size: 14px;
+            |   color: #555;
+            | }
+            | input[type="text"], input[type="password"] {
+            |   width: 100%;
+            |   padding: 12px;
+            |   margin: 5px 0;
+            |   border: 1px solid #ddd;
+            |   border-radius: 8px;
+            |   font-size: 14px;
+            |   background-color: #f9f9f9;
+            | }
+            | input[type="text"]:focus, input[type="password"]:focus {
+            |   border-color: #007aff;
+            |   outline: none;
+            | }
+            | button[type="submit"] {
+            |   background-color: #007aff;
+            |   color: white;
+            |   border: none;
+            |   border-radius: 8px;
+            |   padding: 15px;
+            |   font-size: 16px;
+            |   width: 100%;
+            |   cursor: pointer;
+            |   font-weight: bold;
+            | }
+            | button[type="submit"]:hover {
+            |   background-color: #0051cc;
+            | }
+            | p {
+            |   font-size: 14px;
+            |   margin-top: 15px;
+            | }
+            | a {
+            |   color: #007aff;
+            |   text-decoration: none;
+            | }
+            | a:hover {
+            |   text-decoration: underline;
+            | }
+
+    body
+        .container
+            h1 User Registration
+
+            // 错误消息显示
+            if errorMessage
+                p.error-message= errorMessage
+
+            form(action="/register", method="POST")
+                div
+                    label(for="username") Username:
+                    input(type="text", id="username", name="username", required)
+                div
+                    label(for="password") Password:
+                    input(type="password", id="password", name="password", required)
+                div
+                    label(for="confirmPassword") Confirm Password:
+                    input(type="password", id="confirmPassword", name="confirmPassword", required)
+                div
+                    label(for="role") Role:
+                    input(type="text", id="role", name="role", required)
+                div
+                    label(for="email") E-mail:
+                    input(type="text", id="email", name="email", required)
+                div
+                    button(type="submit") Register
+
+            p Already have an account?
+            a(href="/login") Login here
