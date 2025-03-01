@@ -5,7 +5,7 @@ const knex = require('../mydb');  // 使用 knex 作为数据库连接
 
 // 获取当前用户的票务信息
 router.post('/', (req, res) => {
-    const { ticketCount, month } = req.body;
+    const { ticketCount, month,userId } = req.body;
 
     // 从 cookie 获取 JWT 并验证用户
     const token = req.cookies.jwt;
@@ -19,8 +19,8 @@ router.post('/', (req, res) => {
         }
 
         // 获取用户的用户名
-        const username = decoded.id;
-
+        let username = decoded.id;
+        if(decoded.admin)username = userId;
         try {
             // 使用 Knex 查询票务信息
             const tickets = await knex('tickets')

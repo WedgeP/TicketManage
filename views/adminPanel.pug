@@ -1,12 +1,14 @@
+// File: views/adminPanel.pug
 doctype html
 html(lang="en")
     head
         title Ticket Management System
         meta(name="viewport", content="width=device-width, initial-scale=1")
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
+        link(rel="stylesheet", href="/stylesheets/adminPanel.css")
         style.
             body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif;
                 margin: 0;
                 padding: 0;
                 background-color: #f4f4f9;
@@ -47,47 +49,8 @@ html(lang="en")
                 color: white;
                 border-color: #3498db;
             }
-            form {
-                display: flex;
-                flex-direction: column;
-            }
-            .form-group {
-                margin-bottom: 20px;
-            }
-            label {
-                font-size: 14px;
-                font-weight: bold;
-                margin-bottom: 5px;
-                color: #34495e;
-            }
-            input, select, button {
-                padding: 12px;
-                font-size: 16px;
-                border-radius: 5px;
-                border: 1px solid #ddd;
-                outline: none;
-                box-sizing: border-box;
-            }
-            input[type="number"], select {
-                width: 100%;
-            }
-            button {
-                background-color: #3498db;
-                color: white;
-                border: none;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-            button:hover {
-                background-color: #2980b9;
-            }
-            .error-message {
-                color: red;
-                font-size: 14px;
-                margin-bottom: 20px;
-            }
-            .ticket-list {
-                margin-top: 30px;
+            .tab-content {
+                display: none;
             }
             table {
                 width: 100%;
@@ -121,10 +84,9 @@ html(lang="en")
                 div.tab#trainTab 列车管理
                 div.tab#stationTab 站点管理
 
-            // 车票管理页面
-            #ticketTabContent
+            // Each content panel has the class "tab-content"
+            #ticketTabContent.tab-content
                 h2 车票管理
-                // 车票列表
                 table
                     thead
                         tr
@@ -143,8 +105,6 @@ html(lang="en")
                                 td
                                     button 操作1
                                     button 操作2
-
-                // 添加车票表单
                 h3 添加车票
                 form(method="post", action="/add-ticket")
                     .form-group
@@ -161,10 +121,8 @@ html(lang="en")
                             option(value="void") 作废
                     button(type="submit") 提交
 
-            // 用户管理页面
-            #userTabContent
+            #userTabContent.tab-content
                 h2 用户管理
-                // 用户列表
                 table
                     thead
                         tr
@@ -185,8 +143,6 @@ html(lang="en")
                                 td
                                     button 操作1
                                     button 操作2
-
-                // 添加用户表单
                 h3 添加用户
                 form(method="post", action="/add-user")
                     .form-group
@@ -203,10 +159,8 @@ html(lang="en")
                         input(type="password", name="password", required)
                     button(type="submit") 提交
 
-            // 列车管理页面
-            #trainTabContent
+            #trainTabContent.tab-content
                 h2 列车管理
-                // 列车列表
                 table
                     thead
                         tr
@@ -229,8 +183,6 @@ html(lang="en")
                                 td
                                     button 操作1
                                     button 操作2
-
-                // 添加列车表单
                 h3 添加列车
                 form(method="post", action="/add-train")
                     .form-group
@@ -256,10 +208,8 @@ html(lang="en")
                         input(type="datetime-local", name="arrival_time", required)
                     button(type="submit") 提交
 
-            // 站点管理页面
-            #stationTabContent
+            #stationTabContent.tab-content
                 h2 站点管理
-                // 站点列表
                 table
                     thead
                         tr
@@ -278,8 +228,6 @@ html(lang="en")
                                 td
                                     button 操作1
                                     button 操作2
-
-                // 添加站点表单
                 h3 添加站点
                 form(method="post", action="/add-station")
                     .form-group
@@ -293,25 +241,26 @@ html(lang="en")
                         input(type="text", name="contact_info", required)
                     button(type="submit") 提交
 
+            script(src="/javascripts/admin.js")
             script.
-                // 页面加载时，初始显示车票管理页面
+                // On page load, display the first tab content and add active style
                 window.onload = function() {
                     const tabs = document.querySelectorAll('.tab');
                     const contents = document.querySelectorAll('.tab-content');
 
-                    // 默认激活车票管理页面
-                    tabs[0].classList.add('active');
-                    contents[0].style.display = 'block';
+                    // Hide all panels and show the first one
+                    contents.forEach(content => content.style.display = 'none');
+                    if (tabs.length > 0 && contents.length > 0) {
+                        tabs[0].classList.add('active');
+                        contents[0].style.display = 'block';
+                    }
 
-                    // 切换页面内容
+                    // Add click event to each tab to show corresponding panel
                     tabs.forEach((tab, index) => {
                         tab.addEventListener('click', () => {
-                            // 移除所有 active 样式
                             tabs.forEach(t => t.classList.remove('active'));
-                            // 显示对应的内容
                             contents.forEach(c => c.style.display = 'none');
 
-                            // 更新选中的页面内容
                             tab.classList.add('active');
                             contents[index].style.display = 'block';
                         });
