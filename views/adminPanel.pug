@@ -116,19 +116,23 @@ html(lang="en")
                 p.error-message= errorMessage
 
             .tabs
-                div.tab#ticketTab.active 车票管理
+                div.tab#ticketTab 车票管理
                 div.tab#userTab 用户管理
+                div.tab#trainTab 列车管理
+                div.tab#stationTab 站点管理
 
-            if user && users.length > 0
-                h2 User Manager
+            // 车票管理页面
+            #ticketTabContent
+                h2 车票管理
+                // 车票列表
                 table
                     thead
                         tr
-                            th User ID
-                            th User Type
-                            th User Role
-                            th User Email
-                            th User Password
+                            th 车票 ID
+                            th 车票类型
+                            th 发行日期
+                            th 状态
+                            th 操作
                     tbody
                         each ticket in tickets
                             tr
@@ -136,5 +140,180 @@ html(lang="en")
                                 td= ticket.type
                                 td= ticket.issue_date
                                 td= ticket.status
-            else
-                p No tickets found for this month.
+                                td
+                                    button 操作1
+                                    button 操作2
+
+                // 添加车票表单
+                h3 添加车票
+                form(method="post", action="/add-ticket")
+                    .form-group
+                        label 车票类型
+                        input(type="text", name="type", required)
+                    .form-group
+                        label 发行日期
+                        input(type="date", name="issue_date", required)
+                    .form-group
+                        label 状态
+                        select(name="status")
+                            option(value="available") 可用
+                            option(value="sold") 已售
+                            option(value="void") 作废
+                    button(type="submit") 提交
+
+            // 用户管理页面
+            #userTabContent
+                h2 用户管理
+                // 用户列表
+                table
+                    thead
+                        tr
+                            th 用户 ID
+                            th 用户类型
+                            th 用户角色
+                            th 用户邮箱
+                            th 用户密码
+                            th 操作
+                    tbody
+                        each user in users
+                            tr
+                                td= user.id
+                                td= user.type
+                                td= user.role
+                                td= user.email
+                                td= user.password
+                                td
+                                    button 操作1
+                                    button 操作2
+
+                // 添加用户表单
+                h3 添加用户
+                form(method="post", action="/add-user")
+                    .form-group
+                        label 用户类型
+                        input(type="text", name="type", required)
+                    .form-group
+                        label 用户角色
+                        select(name="role")
+                            option(value="admin") 管理员
+                            option(value="user") 普通用户
+                        input(type="text", name="email", required)
+                    .form-group
+                        label 用户密码
+                        input(type="password", name="password", required)
+                    button(type="submit") 提交
+
+            // 列车管理页面
+            #trainTabContent
+                h2 列车管理
+                // 列车列表
+                table
+                    thead
+                        tr
+                            th 列车 ID
+                            th 车次号码
+                            th 出发站点
+                            th 到达站点
+                            th 出发时间
+                            th 到达时间
+                            th 操作
+                    tbody
+                        each train in trains
+                            tr
+                                td= train.id
+                                td= train.train_number
+                                td= train.departure_station
+                                td= train.arrival_station
+                                td= train.departure_time
+                                td= train.arrival_time
+                                td
+                                    button 操作1
+                                    button 操作2
+
+                // 添加列车表单
+                h3 添加列车
+                form(method="post", action="/add-train")
+                    .form-group
+                        label 车次号码
+                        input(type="text", name="train_number", required)
+                    .form-group
+                        label 出发站点
+                        select(name="departure_station", required)
+                            option(value="station1") 站点1
+                            option(value="station2") 站点2
+                            option(value="station3") 站点3
+                    .form-group
+                        label 到达站点
+                        select(name="arrival_station", required)
+                            option(value="station1") 站点1
+                            option(value="station2") 站点2
+                            option(value="station3") 站点3
+                    .form-group
+                        label 出发时间
+                        input(type="datetime-local", name="departure_time", required)
+                    .form-group
+                        label 到达时间
+                        input(type="datetime-local", name="arrival_time", required)
+                    button(type="submit") 提交
+
+            // 站点管理页面
+            #stationTabContent
+                h2 站点管理
+                // 站点列表
+                table
+                    thead
+                        tr
+                            th 站点 ID
+                            th 站点名称
+                            th 地址
+                            th 联系方式
+                            th 操作
+                    tbody
+                        each station in stations
+                            tr
+                                td= station.id
+                                td= station.name
+                                td= station.address
+                                td= station.contact_info
+                                td
+                                    button 操作1
+                                    button 操作2
+
+                // 添加站点表单
+                h3 添加站点
+                form(method="post", action="/add-station")
+                    .form-group
+                        label 站点名称
+                        input(type="text", name="name", required)
+                    .form-group
+                        label 地址
+                        input(type="text", name="address", required)
+                    .form-group
+                        label 联系方式
+                        input(type="text", name="contact_info", required)
+                    button(type="submit") 提交
+
+            script.
+                // 页面加载时，初始显示车票管理页面
+                window.onload = function() {
+                    const tabs = document.querySelectorAll('.tab');
+                    const contents = document.querySelectorAll('.tab-content');
+
+                    // 默认激活车票管理页面
+                    tabs[0].classList.add('active');
+                    contents[0].style.display = 'block';
+
+                    // 切换页面内容
+                    tabs.forEach((tab, index) => {
+                        tab.addEventListener('click', () => {
+                            // 移除所有 active 样式
+                            tabs.forEach(t => t.classList.remove('active'));
+                            // 显示对应的内容
+                            contents.forEach(c => c.style.display = 'none');
+
+                            // 更新选中的页面内容
+                            tab.classList.add('active');
+                            contents[index].style.display = 'block';
+                        });
+                    });
+                };
