@@ -13,16 +13,19 @@ html(lang="en")
                 padding: 0;
                 background-color: #f4f4f9;
             }
+
             header {
                 background-color: #2c3e50;
                 padding: 20px;
                 color: #ecf0f1;
                 text-align: center;
             }
+
             header h1 {
                 margin: 0;
                 font-size: 36px;
             }
+
             .content {
                 width: 80%;
                 margin: 40px auto;
@@ -31,10 +34,12 @@ html(lang="en")
                 border-radius: 8px;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
+
             .tabs {
                 display: flex;
                 margin-bottom: 20px;
             }
+
             .tab {
                 padding: 14px 20px;
                 margin-right: 10px;
@@ -44,32 +49,123 @@ html(lang="en")
                 border-radius: 5px;
                 font-weight: bold;
             }
+
             .tab.active {
                 background-color: #3498db;
                 color: white;
                 border-color: #3498db;
             }
+
             .tab-content {
                 display: none;
             }
+
             table {
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 20px;
             }
+
             th, td {
                 padding: 12px;
                 text-align: left;
                 border: 1px solid #ddd;
             }
+
             th {
                 background-color: #ecf0f1;
             }
+
             tbody tr:nth-child(even) {
                 background-color: #f9f9f9;
             }
+
             tbody tr:hover {
                 background-color: #f1f1f1;
+            }
+
+            select {
+                padding: 8px 12px;
+                font-size: 16px;
+                border: 2px solid #dddddd;
+                border-radius: 8px;
+                background-color: white;
+                color: #333;
+                cursor: pointer;
+                appearance: none; /* 隐藏默认箭头 */
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                transition: all 0.3s ease-in-out;
+            }
+
+            /* 添加一个自定义的下拉箭头 */
+            select::after {
+                content: "▼";
+                position: absolute;
+                right: 10px;
+                pointer-events: none;
+            }
+
+            /* 鼠标悬停效果 */
+            select:hover {
+                border-color: #45a049;
+                background-color: #f9f9f9;
+            }
+
+            /* 点击时的效果 */
+            select:focus {
+                outline: none;
+                border-color: #3e8e41;
+                box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+            }
+
+            .lfcontainer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+
+            .left {
+                flex: 1;
+            }
+
+            .right {
+                flex: 1;
+                text-align: right;
+            }
+
+            .btn-container {
+                display: flex;
+                justify-content: center; /* 让按钮整体居中 */
+                gap: 20px; /* 控制按钮之间的间距 */
+            }
+
+            button {
+                padding: 8px 16px;
+                font-size: 14px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .btn-edit {
+                background-color: #4CAF50; /* 绿色 */
+                color: white;
+            }
+
+            .btn-edit:hover {
+                background-color: #45a049;
+            }
+
+            .btn-delete {
+                background-color: #f44336; /* 红色 */
+                color: white;
+            }
+
+            .btn-delete:hover {
+                background-color: #d32f2f;
             }
     body
         header
@@ -86,15 +182,23 @@ html(lang="en")
 
             // Each content panel has the class "tab-content"
             #ticketTabContent.tab-content
-                h2 车票管理
+                .lfcontainer
+                    .left
+                        h2 车票管理
+                    .right
+                        label 用户选择
+                        select(name="users")
+                            option(value="userid1") 用户1
+                            option(value="userid2") 用户2
+                            option(value="userid3") 用户3
                 table
                     thead
                         tr
                             th 车票 ID
                             th 车票类型
-                            th 发行日期
+                            th 购买日期
                             th 状态
-                            th 操作
+                            th 修改
                     tbody
                         each ticket in tickets
                             tr
@@ -103,8 +207,9 @@ html(lang="en")
                                 td= ticket.issue_date
                                 td= ticket.status
                                 td
-                                    button 操作1
-                                    button 操作2
+                                    .btn-container
+                                        button.btn-edit 修改
+                                        button.btn-delete 删除
                 h3 添加车票
                 form(method="post", action="/add-ticket")
                     .form-group
@@ -131,7 +236,7 @@ html(lang="en")
                             th 用户角色
                             th 用户邮箱
                             th 用户密码
-                            th 操作
+                            th 修改
                     tbody
                         each user in users
                             tr
@@ -141,8 +246,9 @@ html(lang="en")
                                 td= user.email
                                 td= user.password
                                 td
-                                    button 操作1
-                                    button 操作2
+                                    .btn-container
+                                        button.btn-edit 修改
+                                        button.btn-delete 删除
                 h3 添加用户
                 form(method="post", action="/add-user")
                     .form-group
@@ -153,6 +259,7 @@ html(lang="en")
                         select(name="role")
                             option(value="admin") 管理员
                             option(value="user") 普通用户
+                        label 用户邮箱
                         input(type="text", name="email", required)
                     .form-group
                         label 用户密码
@@ -170,7 +277,7 @@ html(lang="en")
                             th 到达站点
                             th 出发时间
                             th 到达时间
-                            th 操作
+                            th 修改
                     tbody
                         each train in trains
                             tr
@@ -181,8 +288,9 @@ html(lang="en")
                                 td= train.departure_time
                                 td= train.arrival_time
                                 td
-                                    button 操作1
-                                    button 操作2
+                                    .btn-container
+                                        button.btn-edit 修改
+                                        button.btn-delete 删除
                 h3 添加列车
                 form(method="post", action="/add-train")
                     .form-group
@@ -217,7 +325,7 @@ html(lang="en")
                             th 站点名称
                             th 地址
                             th 联系方式
-                            th 操作
+                            th 修改
                     tbody
                         each station in stations
                             tr
@@ -226,8 +334,9 @@ html(lang="en")
                                 td= station.address
                                 td= station.contact_info
                                 td
-                                    button 操作1
-                                    button 操作2
+                                    .btn-container
+                                        button.btn-edit 修改
+                                        button.btn-delete 删除
                 h3 添加站点
                 form(method="post", action="/add-station")
                     .form-group
@@ -244,7 +353,7 @@ html(lang="en")
             script(src="/javascripts/admin.js")
             script.
                 // On page load, display the first tab content and add active style
-                window.onload = function() {
+                window.onload = function () {
                     const tabs = document.querySelectorAll('.tab');
                     const contents = document.querySelectorAll('.tab-content');
 
