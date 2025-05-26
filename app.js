@@ -37,6 +37,7 @@ app.use('/', indexRouter);
 app.use('/users',auth, usersRouter);
 app.use('/register',registerRoute);
 app.use('/tickets',auth,ticketRouter);
+
 //静态文件路由
 app.use(express.static(path.join(__dirname, 'public')));
 // catch 404 and forward to error handler
